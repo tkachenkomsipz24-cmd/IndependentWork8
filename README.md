@@ -28,12 +28,41 @@ dotnet run
 
 ## Приклад виводу програми
 
-> ⚠️ Заповніть після запуску на своєму комп'ютері (час у блоці порівняння швидкості залежить від машини).
 
 ```
-(встав сюди вивід консолі)
+=== Сценарій 1: FileMetadataCache (Dictionary) ===
+Записів у кеші: 2
+Get: report.docx | 24576 байт | 2026-11-10 | hash=a1b2c3
+Contains (інший регістр шляху): True
+Remove photo.png: True
+Contains photo.png після видалення: False
+KeyNotFoundException: Метадані для 'C:\docs\missing.txt' відсутні в кеші.
+
+=== Сценарій 2: TagManager (Dictionary + HashSet) ===
+Повторне додавання "c#" до article1 вдалося: False
+Усі унікальні теги: C#, dotnet, generics, LINQ, python
+Спільні теги article1 та article2: C#, dotnet
+Теги тільки в article1 (відносно article2): LINQ
+Теги article1 після видалення LINQ: C#, dotnet
+
+=== Сценарій 3: SearchIndex (інвертований індекс) ===
+Search("HashSet")                  -> 2, 3
+Search("колекції")                 -> 1, 2
+SearchMultiple("HashSet", "C")   -> 2
+SearchAny("LINQ", "унікальні")   -> 1, 3
+Search("Python") (немає)          -> []
+
+=== Сценарій 4: custom IEqualityComparer ===
+Dictionary (OrdinalIgnoreCase)["HELLO"] = 1
+Додано John(25): True; додано John(30): False; у множині: 1
+Без comparer (за посиланням) у множині: 2
+
+=== Порівняння швидкості пошуку ===
+List<int>.Contains        :    10,4318 мс
+HashSet<int>.Contains     :     0,0100 мс
+Dictionary.ContainsKey    :     0,0964 мс
+(N = 50 000 елементів, 1 000 пошуків останнього елемента)
 ```
 
 ### Скріншот
-
-(встав скріншот)
+![Результат виконання програми](picture.png)
